@@ -7,12 +7,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #005A8D; /* A professional hotel blue */
-            --secondary-color: #AA8A5B; /* A luxurious gold accent */
+            --primary-color: #005A8D;
+            --secondary-color: #AA8A5B;
             --text-color: #333;
             --bg-color: #F8F9FA;
         }
-
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
@@ -27,7 +26,6 @@
             min-height: 100vh;
             padding: 2rem;
         }
-
         .container {
             max-width: 800px;
             width: 100%;
@@ -38,19 +36,16 @@
             text-align: center;
             border-top: 5px solid var(--primary-color);
         }
-
         .header h1 {
             color: var(--primary-color);
             font-weight: 600;
             margin-top: 0;
         }
-
         .header p {
             font-size: 1.1rem;
             color: #555;
             margin-bottom: 30px;
         }
-
         .demo-area {
             background-color: #fff;
             padding: 30px;
@@ -58,7 +53,6 @@
             border: 1px solid #e0e0e0;
             margin-bottom: 30px;
         }
-
         #status-display {
             font-size: 1rem;
             font-weight: 600;
@@ -70,7 +64,6 @@
             align-items: center;
             gap: 8px;
         }
-
         #status-indicator {
             width: 12px;
             height: 12px;
@@ -82,13 +75,11 @@
         #status-indicator.listening { background-color: #007bff; animation: pulse 1.5s infinite; }
         #status-indicator.speaking { background-color: var(--secondary-color); }
         #status-indicator.processing { background-color: #ffc107; }
-
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
             70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
         }
-
         #call-button {
             background-color: var(--primary-color);
             color: white;
@@ -100,27 +91,20 @@
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
         }
-        
         #call-button:hover {
             background-color: #004266;
             transform: translateY(-2px);
         }
-
         #call-button.active {
-            background-color: #dc3545; /* Red for active call */
+            background-color: #dc3545;
         }
-        
-        .suggestions {
-            text-align: left;
-        }
-
+        .suggestions { text-align: left; }
         .suggestions h3 {
             color: var(--primary-color);
             border-bottom: 2px solid #eee;
             padding-bottom: 10px;
             margin-top: 0;
         }
-
         .suggestions ul {
             list-style-type: none;
             padding: 0;
@@ -128,14 +112,12 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
-
         .suggestions li {
             background-color: #f1f1f1;
             padding: 10px 15px;
             border-radius: 5px;
             font-size: 0.9rem;
         }
-
     </style>
 </head>
 <body>
@@ -145,7 +127,6 @@
             <h1>Experience the Future of Guest Service</h1>
             <p>You are interacting with the Virtual Concierge for <strong>The Gemini Grand Hotel</strong>. Press the button below and speak naturally to see how our AI can elevate the guest experience.</p>
         </header>
-
         <section class="demo-area">
             <div id="status-display">
                 <span id="status-indicator"></span>
@@ -155,7 +136,6 @@
                 🎙️ Start Conversation
             </button>
         </section>
-
         <section class="suggestions">
             <h3>Try Asking Questions Like:</h3>
             <ul>
@@ -170,17 +150,10 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.umd.js"></script>
-
     <script>
-        // ===============================================================
-        // VAPI CONFIGURATION
-        // - Remember to use your new, secure API keys.
-        // ===============================================================
         const VAPI_PUBLIC_KEY = 'ea1033a4-1873-44ff-9591-8f23ae7ec795'; 
         const VAPI_ASSISTANT_ID = '4ceb4d3f-2154-4b4a-932c-03d839808c95';
         
-        // --- Do not edit below this line unless you know what you are doing ---
-
         const vapi = new Vapi(VAPI_PUBLIC_KEY);
         const callButton = document.getElementById('call-button');
         const statusText = document.getElementById('status-text');
@@ -203,40 +176,32 @@
 
         callButton.addEventListener('click', toggleCall);
 
-        // Vapi Event Listeners for Interactive UI
         vapi.on('call-start', () => {
             isCallActive = true;
             callButton.innerHTML = '🔴 End Conversation';
             callButton.classList.add('active');
             updateStatus('Connected', 'ready');
         });
-
         vapi.on('call-end', () => {
             isCallActive = false;
             callButton.innerHTML = '🎙️ Start Conversation';
             callButton.classList.remove('active');
             updateStatus('Ready to Assist', '');
         });
-
         vapi.on('speech-start', () => {
             updateStatus('Listening...', 'listening');
         });
-
         vapi.on('speech-end', () => {
-            // Vapi is processing the speech, waiting for AI response
             updateStatus('Processing...', 'processing');
         });
-        
         vapi.on('message', (message) => {
             if (message.type === 'transcript' && message.transcriptType === 'final') {
                 console.log('User said: ', message.transcript);
             }
             if (message.type === 'assistant-message') {
-                // When the assistant starts speaking
                 updateStatus('Assistant Speaking...', 'speaking');
             }
         });
-        
         vapi.on('error', (error) => {
             console.error('Vapi error:', error);
             updateStatus('Error Occurred', '');
@@ -244,13 +209,11 @@
             callButton.innerHTML = '🎙️ Start Conversation';
             callButton.classList.remove('active');
         });
-
-        // Initial state
         updateStatus('Ready to Assist', 'ready');
-
     </script>
 </body>
 </html>
+
 
 
 
