@@ -1,208 +1,253 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice AI Demo | Virtual Concierge for Hospitality</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Base styles for a modern look */
+        :root {
+            --primary-color: #005A8D; /* A professional hotel blue */
+            --secondary-color: #AA8A5B; /* A luxurious gold accent */
+            --text-color: #333;
+            --bg-color: #F8F9FA;
+        }
+
         body {
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px; /* Increased padding for better spacing */
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
             display: flex;
-            flex-direction: column;
-            align-items: center; /* Center items horizontally */
-            justify-content: center; /* Center items vertically */
-            min-height: 150px; /* Ensure enough height for embed frame */
-            background-color: #f8f9fa; /* Light background for the embed container */
-            color: #343a40;
-            text-align: center;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
         }
 
-        /* Container for the UI elements */
-        .vapi-demo-container {
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft, prominent shadow */
-            padding: 25px 35px; /* More padding inside the container */
-            max-width: 380px; /* Max width for a neat look */
+        .container {
+            max-width: 800px;
             width: 100%;
-            box-sizing: border-box; /* Include padding in width calculation */
-            transition: transform 0.3s ease-in-out; /* Subtle hover effect */
-        }
-        .vapi-demo-container:hover {
-            transform: translateY(-3px); /* Lift effect on hover */
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            border-top: 5px solid var(--primary-color);
         }
 
-        /* Title for the demo */
-        h2 {
-            font-size: 1.6em;
-            color: #007bff; /* Primary blue color */
-            margin-bottom: 15px;
+        .header h1 {
+            color: var(--primary-color);
             font-weight: 600;
+            margin-top: 0;
         }
 
-        /* Call to Action Button */
+        .header p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .demo-area {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 30px;
+        }
+
+        #status-display {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #666;
+            height: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ccc;
+            transition: background-color 0.3s ease;
+        }
+        #status-indicator.ready { background-color: #28a745; }
+        #status-indicator.listening { background-color: #007bff; animation: pulse 1.5s infinite; }
+        #status-indicator.speaking { background-color: var(--secondary-color); }
+        #status-indicator.processing { background-color: #ffc107; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+
         #call-button {
-            padding: 15px 30px; /* Larger button */
-            font-size: 1.1em; /* Slightly larger text */
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
-            border-radius: 30px; /* Pill-shaped button */
-            background-color: #28a745; /* Success green */
+            background-color: var(--primary-color);
             color: white;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
-            width: 90%; /* Make button almost full width of container */
-            max-width: 250px;
-            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.2); /* Shadow for green button */
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
-
+        
         #call-button:hover {
-            background-color: #218838; /* Darker green on hover */
-            transform: translateY(-2px); /* Lift button on hover */
+            background-color: #004266;
+            transform: translateY(-2px);
         }
 
-        #call-button.calling {
-            background-color: #dc3545; /* Danger red when calling */
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.2); /* Shadow for red button */
+        #call-button.active {
+            background-color: #dc3545; /* Red for active call */
         }
-        #call-button.calling:hover {
-            background-color: #c82333; /* Darker red on hover */
-        }
-
-        /* Status Display */
-        #call-status {
-            margin-top: 20px;
-            font-size: 1em;
-            color: #6c757d; /* Muted gray for status */
-            min-height: 20px; /* Prevent layout shift when text changes */
+        
+        .suggestions {
+            text-align: left;
         }
 
-        /* Loading animation for status */
-        .status-loading::after {
-            content: ' .';
-            animation: dots 1s steps(5, end) infinite;
+        .suggestions h3 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 0;
         }
 
-        @keyframes dots {
-            0%, 20% {
-                color: rgba(0,0,0,0);
-                text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            40% {
-                color: #6c757d;
-                text-shadow:
-                    .25em 0 0 rgba(0,0,0,0),
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            60% {
-                text-shadow:
-                    .25em 0 0 #6c757d,
-                    .5em 0 0 rgba(0,0,0,0);
-            }
-            80%, 100% {
-                text-shadow:
-                    .25em 0 0 #6c757d,
-                    .5em 0 0 #6c757d;
-            }
+        .suggestions ul {
+            list-style-type: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
+
+        .suggestions li {
+            background-color: #f1f1f1;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="vapi-demo-container">
-        <h2>Talk to Our AI Assistant</h2>
-        <button id="call-button">Start Conversation</button>
-        <div id="call-status">Status: Ready to connect</div>
+    <div class="container">
+        <header class="header">
+            <h1>Experience the Future of Guest Service</h1>
+            <p>You are interacting with the Virtual Concierge for <strong>The Gemini Grand Hotel</strong>. Press the button below and speak naturally to see how our AI can elevate the guest experience.</p>
+        </header>
+
+        <section class="demo-area">
+            <div id="status-display">
+                <span id="status-indicator"></span>
+                <span id="status-text">Ready to Assist</span>
+            </div>
+            <button id="call-button">
+                🎙️ Start Conversation
+            </button>
+        </section>
+
+        <section class="suggestions">
+            <h3>Try Asking Questions Like:</h3>
+            <ul>
+                <li>"I'd like to book a dinner reservation for two."</li>
+                <li>"What are the pool and gym hours?"</li>
+                <li>"Can you send two extra towels to room 501?"</li>
+                <li>"What's the Wi-Fi password?"</li>
+                <li>"Tell me about the best local restaurants."</li>
+                <li>"I need to book a spa appointment for tomorrow."</li>
+            </ul>
+        </section>
     </div>
 
-    <script src="https://cdn.vapi.ai/web/vapi.es.js"></script>
+    <script src="https://unpkg.com/@vapi-ai/web@latest"></script>
+
     <script>
-        const callButton = document.getElementById('call-button');
-        const callStatus = document.getElementById('call-status');
-        const demoContainer = document.querySelector('.vapi-demo-container');
+        // ===============================================================
+        // VAPI CONFIGURATION
+        // - Replace the placeholder values below with your actual keys.
+        // ===============================================================
+        const VAPI_PUBLIC_KEY = 'a0ff9c26-99fa-40ef-a662-8ef75daf46bd'; 
+        const VAPI_ASSISTANT_ID = '4ceb4d3f-2154-4b4a-932c-03d839808c95';
+        
+        // --- Do not edit below this line unless you know what you are doing ---
 
-        // --- IMPORTANT: REPLACE THESE WITH YOUR KEYS ---
-        const VAPI_PUBLIC_KEY = 'a0ff9c26-99fa-40ef-a662-8ef75daf46bd'; // e.g., 'pk_YOUR_KEY_HERE'
-        const VAPI_ASSISTANT_ID = '4ceb4d3f-2154-4b4a-932c-03d839808c95'; // e.g., 'asst_YOUR_ID_HERE'
-        // ---------------------------------------------
-
-        // Initialize Vapi with your Public Key
         const vapi = new Vapi(VAPI_PUBLIC_KEY);
-        let isCalling = false;
+        const callButton = document.getElementById('call-button');
+        const statusText = document.getElementById('status-text');
+        const statusIndicator = document.getElementById('status-indicator');
+        let isCallActive = false;
 
-        // Function to update status with loading dots
-        const updateStatus = (message, isLoading = false) => {
-            callStatus.textContent = message;
-            if (isLoading) {
-                callStatus.classList.add('status-loading');
-            } else {
-                callStatus.classList.remove('status-loading');
-            }
+        const updateStatus = (text, indicatorClass) => {
+            statusText.textContent = text;
+            statusIndicator.className = '';
+            statusIndicator.classList.add(indicatorClass);
         };
 
-        // Handle button clicks
-        callButton.addEventListener('click', () => {
-            if (isCalling) {
+        const toggleCall = () => {
+            if (isCallActive) {
                 vapi.stop();
             } else {
                 vapi.start(VAPI_ASSISTANT_ID);
             }
-        });
+        };
 
-        // --- Vapi Event Listeners for UI updates ---
+        callButton.addEventListener('click', toggleCall);
 
+        // Vapi Event Listeners for Interactive UI
         vapi.on('call-start', () => {
-            isCalling = true;
-            updateStatus('Status: Connecting', true);
-            callButton.textContent = 'End Conversation';
-            callButton.classList.add('calling');
-            demoContainer.style.transform = 'scale(1.02)'; // Slight scale on call start
+            isCallActive = true;
+            callButton.innerHTML = '🔴 End Conversation';
+            callButton.classList.add('active');
+            updateStatus('Connected', 'ready');
         });
 
         vapi.on('call-end', () => {
-            isCalling = false;
-            updateStatus('Status: Conversation ended.');
-            callButton.textContent = 'Start Conversation';
-            callButton.classList.remove('calling');
-            demoContainer.style.transform = 'none'; // Reset scale
+            isCallActive = false;
+            callButton.innerHTML = '🎙️ Start Conversation';
+            callButton.classList.remove('active');
+            updateStatus('Ready to Assist', '');
         });
 
         vapi.on('speech-start', () => {
-            updateStatus('Status: AI is speaking', true);
+            updateStatus('Listening...', 'listening');
         });
 
         vapi.on('speech-end', () => {
-            updateStatus('Status: Your turn to speak');
+            // Vapi is processing the speech, waiting for AI response
+            updateStatus('Processing...', 'processing');
         });
-
-        vapi.on('mic-level', (level) => {
-            // Optional: You could visualize mic level here if needed, e.g., a small bar
-            // console.log('Mic Level:', level);
+        
+        vapi.on('message', (message) => {
+            if (message.type === 'transcript' && message.transcriptType === 'final') {
+                console.log('User said: ', message.transcript);
+            }
+            if (message.type === 'assistant-message') {
+                // When the assistant starts speaking
+                updateStatus('Assistant Speaking...', 'speaking');
+            }
         });
-
-        vapi.on('volume-level', (level) => {
-            // Optional: You could visualize output volume here
-            // console.log('Volume Level:', level);
-        });
-
+        
         vapi.on('error', (error) => {
-            console.error('Vapi Error:', error);
-            isCalling = false;
-            updateStatus(`Status: Error - ${error.message || 'Please try again.'}`);
-            callButton.textContent = 'Start Conversation';
-            callButton.classList.remove('calling');
-            demoContainer.style.transform = 'none'; // Reset scale
+            console.error('Vapi error:', error);
+            updateStatus('Error Occurred', '');
+            isCallActive = false;
+            callButton.innerHTML = '🎙️ Start Conversation';
+            callButton.classList.remove('active');
         });
 
-        // Initial status update
-        document.addEventListener('DOMContentLoaded', () => {
-            updateStatus('Status: Ready to connect');
-        });
+        // Initial state
+        updateStatus('Ready to Assist', 'ready');
+
     </script>
-
 </body>
 </html>
