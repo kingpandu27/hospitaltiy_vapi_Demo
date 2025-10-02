@@ -3,238 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice AI Assistant Demo | Hospitality Solutions</title>
+    <title>Mia - Hospitality Voice AI Demo</title>
+    
+    <!-- Tailwind CSS for styling the page -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
-
-        :root {
-            --primary-color: #007bff; /* A professional blue */
-            --secondary-color: #f8f9fa; /* Light grey background */
-            --dark-color: #343a40; /* Dark text */
-            --border-color: #dee2e6;
-            --border-radius: 8px;
-        }
-
         body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--secondary-color);
-            color: var(--dark-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* A light, clean background */
         }
-
-        .container {
-            max-width: 800px;
-            width: 90%;
-            margin: 2rem auto;
-            background: #fff;
-            padding: 2rem;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
+        /* Style for the copy feedback message */
+        .copy-feedback {
+            position: absolute;
+            bottom: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #10B981;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
         }
-
-        header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        header p {
-            font-size: 1.1rem;
-            color: #6c757d;
-            margin-bottom: 2rem;
-        }
-
-        .demo-section {
-            padding: 2.5rem 2rem;
-            border: 1px dashed var(--border-color);
-            border-radius: var(--border-radius);
-            margin-bottom: 2rem;
-        }
-        
-        #vapi-button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 2.5rem; /* ADDED: Creates space from the "Try Asking" section above */
-        }
-
-        /* REMOVED margin-top from here to avoid double spacing */
-        .example-prompts {
-        }
-        
-        .example-prompts h4 {
-            font-weight: 400;
-            color: #6c757d;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-
-        .prompt-tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .prompt-tag {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            border: 1px solid var(--border-color);
-            color: var(--dark-color);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: default;
-            transition: all 0.2s ease-in-out;
-        }
-        
-        .prompt-tag:hover {
-            background-color: #e9ecef;
-            border-color: #ced4da;
-        }
-
-        .features-section {
-            display: flex;
-            justify-content: space-around;
-            gap: 1.5rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .feature-card {
-            flex-basis: 30%;
-            min-width: 200px;
-        }
-
-        .feature-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-        }
-
-        .feature-card p {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            color: #6c757d;
-        }
-
-        footer {
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-
-        footer a {
-            color: var(--primary-color);
-            text-decoration: none;
+        .copy-feedback.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-5px);
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 antialiased">
 
-    <div class="container">
-        <header>
-            <h1>Experience the Future of Guest Service</h1>
-            <p>Click the button below to talk to our intelligent Voice AI Assistant. Ask it about room availability, amenities, or to make a dinner reservation.</p>
-        </header>
+    <!-- Main Content Container -->
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+        <div class="max-w-4xl w-full text-center space-y-8">
 
-        <main>
-            <div class="demo-section">
+            <!-- Header Section -->
+            <header>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
+                    Meet <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">Mia</span>
+                </h1>
+                <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+                    Your AI-Powered Hotel Concierge. Elevate guest experiences, streamline operations, and improve retention with our intelligent voice assistant.
+                </p>
+            </header>
+                    <h2 class="text-xl sm-text-2xl font-semibold text-gray-800">
+                        Start a Conversation
+                    </h2>
+                    <p class="mt-2 text-gray-500">
+                        Click the voice button on the bottom-right to talk to Mia.
+                    </p>
+                    <div class="mt-4 flex justify-center items-center space-x-2">
+                        <span class="text-gray-600">Status:</span>
+                        <span id="call-status" class="font-semibold px-3 py-1 text-sm rounded-full transition-colors duration-300 bg-gray-200 text-gray-800">Idle</span>
+                    </div>
+                    <p class="mt-6 font-medium text-gray-600">Need some ideas? Try asking:</p>
 
-                <div class="example-prompts">
-                    <h4>Try Asking:</h4>
-                    <div class="prompt-tags-container">
-                        <span class="prompt-tag">"Can you bring me 2 towels?"</span>
-                        <span class="prompt-tag">"The TV remote isn't working."</span>
-                        <span class="prompt-tag">"I'd like to order a coke."</span>
-                        <span class="prompt-tag">"What time does the pool close?"</span>
-                        <span class="prompt-tag">"Please clean my room."</span>
+                    <!-- Grid for Sample Questions -->
+                    <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"I want 2 towels."</p>
+                        </div>
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"I want coke."</p>
+                        </div>
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"I want to order pizza in my room."</p>
+                        </div>
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"Please clean my room."</p>
+                        </div>
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"The TV remote in my room is not working."</p>
+                        </div>
+                        <!-- Sample Question Card -->
+                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                            <p class="font-medium text-gray-700">"What time does the pool close?"</p>
+                        </div>
                     </div>
                 </div>
+            </main>
 
-                <div id="vapi-button-container">
-                </div>
+            <!-- Footer -->
+            <footer class="text-center text-gray-400 text-sm">
+                <p>&copy; 2025 ByTy by RSkusava pvt ltd. All Rights Reserved.</p>
+            </footer>
 
-            </div>
-
-            <div class="features-section">
-                <div class="feature-card">
-                    <h3>24/7 Availability</h3>
-                    <p>Provide instant, round-the-clock support to your guests, freeing up your front-desk staff for high-value interactions.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Multi-lingual Support</h3>
-                    <p>Effortlessly communicate with international guests in their native language, enhancing their experience.</p>
-                </div>
-                <div class="feature-card">
-                    <h3>Instant Bookings</h3>
-                    <p>Handle direct bookings for rooms, spa appointments, and restaurant reservations over the phone, seamlessly.</p>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <p>Impressed? <a href="mailto:your-email@example.com">Contact us</a> to get a personalized AI for your hotel.</p>
-        </footer>
+        </div>
     </div>
-    
+
+    <!-- Vapi AI HTML Script Tag -->
     <script>
-      var vapiInstance = null;
-      const assistant = "YOUR_ASSISTANT_ID"; 
-      const apiKey = "YOUR_PUBLIC_API_KEY";
-      
-      const customButtonStyle = {
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        borderRadius: '50px',
-        padding: '25px 60px',
-        fontSize: '22px',
-        fontWeight: '700',
-        boxShadow: '0 8px 25px rgba(102, 126, 234, 0.5)',
-      };
-      
-      const customPanelStyle = {
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-        borderRadius: '16px',
-        border: '2px solid #e1e8ed',
-        backdropFilter: 'blur(10px)',
-      };
-      
-      const buttonConfig = {
-        position: 'inline',
-        element: '#vapi-button-container',
-        button: { style: customButtonStyle },
-        panel: { style: customPanelStyle }
-      };
+        var vapiInstance = null;
 
-      (function (d, t) {
-        var g = document.createElement(t),
-          s = d.getElementsByTagName(t)[0];
-        g.src =
-          "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-        g.defer = true;
-        g.async = true;
-        s.parentNode.insertBefore(g, s);
+        // IMPORTANT: Substitute these placeholder values with your actual Vapi credentials.
+        const assistant = "4ceb4d3f-2154-4b4a-932c-03d839808c95"; // Your Assistant ID from the Vapi Dashboard.
+        const apiKey = "ea1033a4-1873-44ff-9591-8f23ae7ec795"; // Your Public API Key from the Vapi Dashboard.
 
-        g.onload = function () {
-          vapiInstance = window.vapiSDK.run({
-            apiKey: apiKey,
-            assistant: assistant,
-            config: buttonConfig,
-          });
+        // Configuration for the Vapi button, including custom styles.
+        const buttonConfig = {
+            // Position the button on the bottom right of the screen.
+            position: "bottom-right",
+            
+            // Apply custom styles to the button and the conversation panel.
+            style: {
+                // Custom button styles
+                button: {
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    borderRadius: '25px',
+                    width: '60px',
+                    height: '60px',
+                    padding: '12px 30px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
+                },
+                // Custom panel styles
+                panel: {
+                    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+                    borderRadius: '16px',
+                    border: '2px solid #e1e8ed',
+                    backdropFilter: 'blur(10px)',
+                }
+            }
         };
-      })(document, "script");
+
+        // This function dynamically loads the Vapi script and initializes the SDK.
+        (function(d, t) {
+            var g = document.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+            g.defer = true;
+            g.async = true;
+            s.parentNode.insertBefore(g, s);
+
+            // Once the script is loaded, run the Vapi SDK.
+            g.onload = function() {
+                vapiInstance = window.vapiSDK.run({
+                    apiKey: apiKey, // mandatory
+                    assistant: assistant, // mandatory
+                    config: buttonConfig, // optional
+                });
+
+                // --- Event Handling & Status Updates ---
+                const statusElement = document.getElementById('call-status');
+
+                const updateStatus = (text, bgColor, textColor) => {
+                    if (statusElement) {
+                        statusElement.textContent = text;
+                        // A simple way to swap Tailwind classes for the badge's color
+                        statusElement.className = `font-semibold px-3 py-1 text-sm rounded-full transition-colors duration-300 ${bgColor} ${textColor}`;
+                    }
+                };
+
+                vapiInstance.on('call-start', () => {
+                    console.log('Vapi: Call has started.');
+                    updateStatus('Connected', 'bg-green-100', 'text-green-800');
+                });
+
+                vapiInstance.on('call-end', () => {
+                    console.log('Vapi: Call has ended.');
+                    updateStatus('Ended', 'bg-gray-200', 'text-gray-800');
+                    // Revert to Idle after 2 seconds for a better user experience.
+                    setTimeout(() => updateStatus('Idle', 'bg-gray-200', 'text-gray-800'), 2000);
+                });
+
+                vapiInstance.on('speech-start', () => {
+                    console.log('Vapi: User started speaking.');
+                    updateStatus('Listening...', 'bg-blue-100', 'text-blue-800');
+                });
+
+                vapiInstance.on('speech-end', () => {
+                    console.log('Vapi: User stopped speaking.');
+                    // After user speaks, the AI is processing.
+                    updateStatus('Processing...', 'bg-yellow-100', 'text-yellow-800');
+                });
+
+                vapiInstance.on('message', (message) => {
+                    console.log('Vapi message:', message);
+                    if (message.type === 'transcript') {
+                        console.log(`[${message.role}]: ${message.transcript}`);
+                        // When the assistant starts talking, update the status.
+                        if (message.role === 'assistant' && message.transcript.trim() !== '') {
+                             updateStatus('Mia is Speaking...', 'bg-purple-100', 'text-purple-800');
+                        }
+                    }
+                });
+
+                vapiInstance.on('error', (error) => {
+                    console.error('Vapi error:', error);
+                    updateStatus('Error', 'bg-red-100', 'text-red-800');
+                    setTimeout(() => updateStatus('Idle', 'bg-gray-200', 'text-gray-800'), 2000);
+                });
+            };
+        })(document, "script");
     </script>
 
 </body>
 </html>
-
-
 
 
