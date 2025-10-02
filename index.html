@@ -3,216 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice AI Demo | Virtual Concierge for Hospitality</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #005A8D;
-            --secondary-color: #AA8A5B;
-            --text-color: #333;
-            --bg-color: #F8F9FA;
-        }
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 2rem;
-        }
-        .container {
-            max-width: 800px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 40px;
-            text-align: center;
-            border-top: 5px solid var(--primary-color);
-        }
-        .header h1 {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-top: 0;
-        }
-        .header p {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 30px;
-        }
-        .demo-area {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 30px;
-        }
-        #status-display {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #666;
-            height: 24px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-        #status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ccc;
-            transition: background-color 0.3s ease;
-        }
-        #status-indicator.ready { background-color: #28a745; }
-        #status-indicator.listening { background-color: #007bff; animation: pulse 1.5s infinite; }
-        #status-indicator.speaking { background-color: var(--secondary-color); }
-        #status-indicator.processing { background-color: #ffc107; }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
-        }
-        #call-button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-        }
-        #call-button:hover {
-            background-color: #004266;
-            transform: translateY(-2px);
-        }
-        #call-button.active {
-            background-color: #dc3545;
-        }
-        .suggestions { text-align: left; }
-        .suggestions h3 {
-            color: var(--primary-color);
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        .suggestions ul {
-            list-style-type: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .suggestions li {
-            background-color: #f1f1f1;
-            padding: 10px 15px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
+    <title>My Website with Vapi Assistant</title>
+    </head>
 <body>
 
-    <div class="container">
-        <header class="header">
-            <h1>Experience the Future of Guest Service</h1>
-            <p>You are interacting with the Virtual Concierge for <strong>The Gemini Grand Hotel</strong>. Press the button below and speak naturally to see how our AI can elevate the guest experience.</p>
-        </header>
-        <section class="demo-area">
-            <div id="status-display">
-                <span id="status-indicator"></span>
-                <span id="status-text">Ready to Assist</span>
-            </div>
-            <button id="call-button">
-                🎙️ Start Conversation
-            </button>
-        </section>
-        <section class="suggestions">
-            <h3>Try Asking Questions Like:</h3>
-            <ul>
-                <li>"I'd like to book a dinner reservation for two."</li>
-                <li>"What are the pool and gym hours?"</li>
-                <li>"Can you send two extra towels to room 501?"</li>
-                <li>"What's the Wi-Fi password?"</li>
-                <li>"Tell me about the best local restaurants."</li>
-                <li>"I need to book a spa appointment for tomorrow."</li>
-            </ul>
-        </section>
-    </div>
+    <h1>Welcome to my website!</h1>
+    <p>This is a sample page. The Vapi AI assistant button should appear shortly.</p>
+    <button>A regular button</button>
 
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/index.umd.js"></script>
+
     <script>
-        const VAPI_PUBLIC_KEY = 'ea1033a4-1873-44ff-9591-8f23ae7ec795'; 
-        const VAPI_ASSISTANT_ID = '4ceb4d3f-2154-4b4a-932c-03d839808c95';
-        
-        const vapi = new Vapi(VAPI_PUBLIC_KEY);
-        const callButton = document.getElementById('call-button');
-        const statusText = document.getElementById('status-text');
-        const statusIndicator = document.getElementById('status-indicator');
-        let isCallActive = false;
+      var vapiInstance = null;
 
-        const updateStatus = (text, indicatorClass) => {
-            statusText.textContent = text;
-            statusIndicator.className = '';
-            statusIndicator.classList.add(indicatorClass);
+      // IMPORTANT: Replace these placeholder values with your actual ID and Key.
+      const assistant = "4ceb4d3f-2154-4b4a-932c-03d839808c95"; // Substitute with your assistant ID
+      const apiKey = "ea1033a4-1873-44ff-9591-8f23ae7ec795"; // Substitute with your Public key from Vapi Dashboard.
+      
+      const buttonConfig = {}; // Modify this as required, e.g., { "position": "bottom-left" }
+
+      (function (d, t) {
+        var g = document.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+        g.src =
+          "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        g.defer = true;
+        g.async = true;
+        s.parentNode.insertBefore(g, s);
+
+        g.onload = function () {
+          vapiInstance = window.vapiSDK.run({
+            apiKey: apiKey, // mandatory
+            assistant: assistant, // mandatory
+            config: buttonConfig, // optional
+          });
         };
-
-        const toggleCall = () => {
-            if (isCallActive) {
-                vapi.stop();
-            } else {
-                vapi.start(VAPI_ASSISTANT_ID);
-            }
-        };
-
-        callButton.addEventListener('click', toggleCall);
-
-        vapi.on('call-start', () => {
-            isCallActive = true;
-            callButton.innerHTML = '🔴 End Conversation';
-            callButton.classList.add('active');
-            updateStatus('Connected', 'ready');
-        });
-        vapi.on('call-end', () => {
-            isCallActive = false;
-            callButton.innerHTML = '🎙️ Start Conversation';
-            callButton.classList.remove('active');
-            updateStatus('Ready to Assist', '');
-        });
-        vapi.on('speech-start', () => {
-            updateStatus('Listening...', 'listening');
-        });
-        vapi.on('speech-end', () => {
-            updateStatus('Processing...', 'processing');
-        });
-        vapi.on('message', (message) => {
-            if (message.type === 'transcript' && message.transcriptType === 'final') {
-                console.log('User said: ', message.transcript);
-            }
-            if (message.type === 'assistant-message') {
-                updateStatus('Assistant Speaking...', 'speaking');
-            }
-        });
-        vapi.on('error', (error) => {
-            console.error('Vapi error:', error);
-            updateStatus('Error Occurred', '');
-            isCallActive = false;
-            callButton.innerHTML = '🎙️ Start Conversation';
-            callButton.classList.remove('active');
-        });
-        updateStatus('Ready to Assist', 'ready');
+      })(document, "script");
     </script>
-</body>
+    </body>
 </html>
+
 
 
 
