@@ -18,25 +18,49 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* A light, clean background */
+            position: relative; /* Needed for the pseudo-element */
         }
-        /* Style for the copy feedback message */
-        .copy-feedback {
-            position: absolute;
-            bottom: 110%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #10B981;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 14px;
-            opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
+
+        /* --- Dynamic Background Animation --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, rgba(200, 200, 255, 0.1), rgba(255, 255, 255, 0) 70%);
+            transition: all 1.5s ease-in-out;
+            transform: scale(1);
+            opacity: 0.5;
         }
-        .copy-feedback.visible {
-            opacity: 1;
-            transform: translateX(-50%) translateY(-5px);
+
+        /* State for when connected */
+        body.state-connected::before {
+            background: radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.2), rgba(255, 255, 255, 0) 70%); /* Greenish glow */
+            opacity: 0.6;
+        }
+
+        /* State for when the user is speaking */
+        body.state-listening::before {
+            background: radial-gradient(circle at 50% 50%, rgba(96, 165, 250, 0.3), rgba(255, 255, 255, 0) 70%); /* Blueish glow */
+            transform: scale(1.5);
+            opacity: 0.7;
+        }
+
+        /* State for when Vapi is processing */
+        body.state-processing::before {
+            background: radial-gradient(circle at 50% 50%, rgba(250, 204, 21, 0.25), rgba(255, 255, 255, 0) 70%); /* Yellowish glow */
+            transform: scale(1.2);
+            opacity: 0.6;
+        }
+
+        /* State for when Mia is speaking */
+        body.state-speaking::before {
+            background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.3), rgba(255, 255, 255, 0) 70%); /* Purplish glow */
+            transform: scale(1.5);
+            opacity: 0.7;
         }
     </style>
 </head>
@@ -55,7 +79,11 @@
                     Your AI-Powered Hotel Concierge. Elevate guest experiences, streamline operations, and improve retention with our intelligent voice assistant.
                 </p>
             </header>
-                    <h2 class="text-xl sm-text-2xl font-semibold text-gray-800">
+            
+            <!-- Instructions & Sample Prompts Section -->
+            <main class="w-full">
+                <div class="bg-white/70 backdrop-blur-sm p-6 sm:p-8 rounded-2xl shadow-lg border border-gray-200">
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-800">
                         Start a Conversation
                     </h2>
                     <p class="mt-2 text-gray-500">
@@ -70,27 +98,27 @@
                     <!-- Grid for Sample Questions -->
                     <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"I want 2 towels."</p>
                         </div>
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"I want coke."</p>
                         </div>
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"I want to order pizza in my room."</p>
                         </div>
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"Please clean my room."</p>
                         </div>
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"The TV remote in my room is not working."</p>
                         </div>
                         <!-- Sample Question Card -->
-                        <div class="sample-prompt bg-gray-50 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
+                        <div class="sample-prompt bg-gray-50/80 p-4 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors">
                             <p class="font-medium text-gray-700">"What time does the pool close?"</p>
                         </div>
                     </div>
@@ -115,12 +143,8 @@
 
         // Configuration for the Vapi button, including custom styles.
         const buttonConfig = {
-            // Position the button on the bottom right of the screen.
             position: "bottom-right",
-            
-            // Apply custom styles to the button and the conversation panel.
             style: {
-                // Custom button styles
                 button: {
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                     borderRadius: '25px',
@@ -131,7 +155,6 @@
                     fontWeight: '600',
                     boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)',
                 },
-                // Custom panel styles
                 panel: {
                     background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
                     borderRadius: '16px',
@@ -150,55 +173,63 @@
             g.async = true;
             s.parentNode.insertBefore(g, s);
 
-            // Once the script is loaded, run the Vapi SDK.
             g.onload = function() {
                 vapiInstance = window.vapiSDK.run({
-                    apiKey: apiKey, // mandatory
-                    assistant: assistant, // mandatory
-                    config: buttonConfig, // optional
+                    apiKey: apiKey,
+                    assistant: assistant,
+                    config: buttonConfig,
                 });
 
                 // --- Event Handling & Status Updates ---
                 const statusElement = document.getElementById('call-status');
+                const bodyElement = document.body;
 
                 const updateStatus = (text, bgColor, textColor) => {
                     if (statusElement) {
                         statusElement.textContent = text;
-                        // A simple way to swap Tailwind classes for the badge's color
                         statusElement.className = `font-semibold px-3 py-1 text-sm rounded-full transition-colors duration-300 ${bgColor} ${textColor}`;
+                    }
+                };
+
+                const setBodyState = (state) => {
+                    bodyElement.classList.remove('state-connected', 'state-listening', 'state-processing', 'state-speaking');
+                    if (state) {
+                        bodyElement.classList.add(state);
                     }
                 };
 
                 vapiInstance.on('call-start', () => {
                     console.log('Vapi: Call has started.');
                     updateStatus('Connected', 'bg-green-100', 'text-green-800');
+                    setBodyState('state-connected');
                 });
 
                 vapiInstance.on('call-end', () => {
                     console.log('Vapi: Call has ended.');
                     updateStatus('Ended', 'bg-gray-200', 'text-gray-800');
-                    // Revert to Idle after 2 seconds for a better user experience.
+                    setBodyState(null);
                     setTimeout(() => updateStatus('Idle', 'bg-gray-200', 'text-gray-800'), 2000);
                 });
 
                 vapiInstance.on('speech-start', () => {
                     console.log('Vapi: User started speaking.');
                     updateStatus('Listening...', 'bg-blue-100', 'text-blue-800');
+                    setBodyState('state-listening');
                 });
 
                 vapiInstance.on('speech-end', () => {
                     console.log('Vapi: User stopped speaking.');
-                    // After user speaks, the AI is processing.
                     updateStatus('Processing...', 'bg-yellow-100', 'text-yellow-800');
+                    setBodyState('state-processing');
                 });
 
                 vapiInstance.on('message', (message) => {
                     console.log('Vapi message:', message);
                     if (message.type === 'transcript') {
                         console.log(`[${message.role}]: ${message.transcript}`);
-                        // When the assistant starts talking, update the status.
                         if (message.role === 'assistant' && message.transcript.trim() !== '') {
                              updateStatus('Mia is Speaking...', 'bg-purple-100', 'text-purple-800');
+                             setBodyState('state-speaking');
                         }
                     }
                 });
@@ -206,6 +237,7 @@
                 vapiInstance.on('error', (error) => {
                     console.error('Vapi error:', error);
                     updateStatus('Error', 'bg-red-100', 'text-red-800');
+                    setBodyState(null);
                     setTimeout(() => updateStatus('Idle', 'bg-gray-200', 'text-gray-800'), 2000);
                 });
             };
@@ -214,5 +246,6 @@
 
 </body>
 </html>
+
 
 
