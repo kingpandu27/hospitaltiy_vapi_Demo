@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mia - Hospitality Voice AI Demo</title>
+    <title>GiGi - Hospitality Voice AI Demo</title>
     
     <!-- Tailwind CSS for styling the page -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -73,7 +73,7 @@
             <!-- Header Section -->
             <header>
                 <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
-                    Meet <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">Mia</span>
+                    Meet <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600">GiGi</span>
                 </h1>
                 <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
                     Your AI-Powered Hotel Concierge. Elevate guest experiences, streamline operations, and improve retention with our intelligent voice assistant.
@@ -228,7 +228,7 @@
                     if (message.type === 'transcript') {
                         console.log(`[${message.role}]: ${message.transcript}`);
                         if (message.role === 'assistant' && message.transcript.trim() !== '') {
-                             updateStatus('Mia is Speaking...', 'bg-purple-100', 'text-purple-800');
+                             updateStatus('GiGi is Speaking...', 'bg-purple-100', 'text-purple-800');
                              setBodyState('state-speaking');
                         }
                     }
@@ -246,6 +246,7 @@
 
 </body>
 </html>
+
 
 
 
